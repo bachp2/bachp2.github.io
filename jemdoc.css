@@ -237,7 +237,7 @@ p + div.codeblock {
 }
 
 div.codeblock, div.infoblock {
-	margin-right: 0%;
+	margin-right: 5%;
 	margin-top: 1.2em;
 	margin-bottom: 1.3em;
 }
@@ -252,6 +252,8 @@ div.blocktitle {
 div.blockcontent {
 	border: 1px solid silver;
 	padding: 0.3em 0.5em;
+	white-space: normal; 
+	overflow: auto;
 }
 
 div.infoblock > div.blockcontent {
@@ -373,6 +375,13 @@ table.imgtable, table.imgtable td {
   margin-right: auto;
   margin-bottom: 15px;
   margin-top: 15px;
+  width: 50%;
+}
+
+.vidcenter{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   width: 50%;
 }
 

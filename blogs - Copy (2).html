@@ -38,10 +38,10 @@ MathJax.Hub.Config({
 </h2>
 
 <p>
-<figure>
+
 <img src="orbitcam.jpg" alt="Arcball Camera in Spherical Coordinates" class="center" width="500" height="333">
 <figcaption>Camera orbiting in arcball control system</figcaption>
-</figure><br />
+<br />
 An arcball rotation control system allows us to rotate the camera viewport freely around an object that is placed in the scene. This is
 
 one of the feature I want to implement in my FEA sandbox application. In my previous attempt to implement this camera system, my
@@ -225,8 +225,6 @@ glm::vec3 getCameraPosition()
 
 This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute <tt>lookAt</tt> matrix only once during setup. <br /><br />
 </p>
-
-<iframe class='center' width="640" height="564" src="https://player.vimeo.com/video/321640008" frameborder="0" allowFullScreen mozallowfullscreen webkitAllowFullScreen></iframe>
 
 </td>
 </tr>
