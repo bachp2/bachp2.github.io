@@ -558,9 +558,11 @@ def quote(s):
 
 def replacequoted(b):
   """Quotes {{raw html}} sections."""
-
+  #r = re.compile(r'(?<!\\)\[raw((?:\{.*?\}){,1})]', re.M + re.S)
   r = re.compile(r'\{\{(.*?)\}\}', re.M + re.S)
+  #print("found html section")
   m = r.search(b)
+  print(m)
   while m:
     qb = quote(m.group(1))
 
@@ -628,15 +630,15 @@ def replaceequations(b, f):
   return replacequoted(b)
 
 def replaceimages(b):
-  # works with [img{width}{height}{alttext} location caption].
-  r = re.compile(r'(?<!\\)\[img((?:\{.*?\}){,3})\s(.*?)(?:\s(.*?))?(?<!\\)\]',
+  # works with [img{width}{height}{alttext}{caption} location caption].
+  r = re.compile(r'(?<!\\)\[img((?:\{.*?\}){,4})\s(.*?)(?:\s(.*?))?(?<!\\)\]',
            re.M + re.S)
   m = r.search(b)
   s = re.compile(r'{(.*?)}', re.M + re.S)
   while m:
     m1 = list(s.findall(m.group(1)))
     m1 += ['']*(3 - len(m1))
-
+    #print(m1)
     bits = []
     link = m.group(2).strip()
     bits.append(r'src=\"%s\"' % quote(link))
@@ -657,8 +659,8 @@ def replaceimages(b):
       bits.append(r'alt=\"%s\"' % quote(m1[2]))
     else:
       bits.append(r'alt=\"\"')
-
-    b = b[:m.start()] + r'<img %s />' % " ".join(bits) + b[m.end():]
+    bits.append(r'class=\"center\"')
+    b = b[:m.start()] + r'<img %s />' % " ".join(bits) + r'<figcaption>%s</figcaption>' % quote(m1[3]) + r'<br />' + b[m.end():]
 
     m = r.search(b, m.start())
 
@@ -726,10 +728,15 @@ def br(b, f, tableblock=False):
   # Deal with {{html embedding}}.
   b = replacequoted(b)
 
-  b = allreplace(b)
+  # Deal with /italics/ first because the '/' in other tags would otherwise
+  # interfere.
+  r = re.compile(r'(?<!\\)/(.*?)(?<!\\)/', re.M + re.S)
+  b = re.sub(r, r'<i>\1</i>', b)
 
-  b = b.lstrip('-. \t') # remove leading spaces, tabs, dashes, dots.
+  b = allreplace(b)
+  # Deal with image
   b = replaceimages(b) # jem not sure if this is still used.
+  b = b.lstrip('-. \t') # remove leading spaces, tabs, dashes, dots.
 
   # Slightly nasty hackery in this next bit.
   b = replacepercents(b)
@@ -737,11 +744,6 @@ def br(b, f, tableblock=False):
   b = re.sub(r'BSNOTLINKLEFT12039XX', r'[', b)
   b = re.sub(r'BSNOTLINKRIGHT12039XX', r']', b)
   b = replacequoted(b)
-
-  # Deal with /italics/ first because the '/' in other tags would otherwise
-  # interfere.
-  r = re.compile(r'(?<!\\)/(.*?)(?<!\\)/', re.M + re.S)
-  b = re.sub(r, r'<i>\1</i>', b)
 
   # Deal with *bold*.
   r = re.compile(r'(?<!\\)\*(.*?)(?<!\\)\*', re.M + re.S)

@@ -380,17 +380,12 @@ table.imgtable, table.imgtable td {
   width: 50%;
 }
 
-figure {
-    display: inline-block;
-    border: 0px dotted gray;
-    margin: 20px; /* adjust as needed */
-}
-
-figure img {
-    vertical-align: top;
-}
-
-figure figcaption {
-    border: 1px dotted blue;
+img {
     text-align: center;
+}
+
+figcaption {
+	text-align: center;
+	font-size: 80%;
+	font-style: oblique;
 }

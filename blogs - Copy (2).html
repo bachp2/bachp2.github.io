@@ -1,39 +1,97 @@
-# jemdoc: menu{MENU}{blogs.html}, nofooter
-= Blogs
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" href="jemdoc.css" type="text/css" />
+<title>Blogs
+</title>
+<!-- MathJax -->
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<!-- End MathJax -->
+</head>
+<body>
+<table summary="Table for page layout." id="tlayout">
+<tr valign="top">
+<td id="layout-menu">
+<div class="menu-item"><a href="index.html">home</a></div>
+<div class="menu-item"><a href="blogs.html" class="current">blogs</a></div>
+<div class="menu-item"><a href="my_resume.pdf">resume</a></div>
+<div class="menu-item"><a href="random.html">random</a></div>
+<div class="menu-item"><a href="archives.html">archives</a></div>
+</td>
+<td id="layout-content">
+<div id="toptitle">
+<h1>Blogs
+</h1>
+<div id="subtitle">
+</div>
+</div>
+<h2>Arcball Camera System Using Euler Angles
+</h2>
 
-== Arcball Camera System Using Euler Angles
-
-[img{500}{}{}{Camera orbiting in arcball control system} orbitcam.jpg]
-
+<p>
+<figure>
+<img src="orbitcam.jpg" alt="Arcball Camera in Spherical Coordinates" class="center" width="500" height="333">
+<figcaption>Camera orbiting in arcball control system</figcaption>
+</figure><br />
 An arcball rotation control system allows us to rotate the camera viewport freely around an object that is placed in the scene. This is
+
 one of the feature I want to implement in my FEA sandbox application. In my previous attempt to implement this camera system, my
+
 rotation scheme suffered from the singularity problem where if the camera pitches more than 90 degrees, the camera is upside-down and 
+
 the view tends to reverse. In this document, I'll touch on an implementation using Euler angles that completely eliminates this 
+
 singularity problem. This document assumes basic knowledge on rendering scene in 3D through three transformations: transformation to 
-global coordinates from local by $M$ matrix, transformation to camera viewport by $V$ matrix, and a final transformation to render the 3D
-scene onto the computer screen by $P$ matrix. This [https://www.3dgep.com/understanding-the-view-matrix/ article] explains these 
-concepts quite well.\n\n
+
+global coordinates from local by \(M\) matrix, transformation to camera viewport by \(V\) matrix, and a final transformation to render the 3D
+
+scene onto the computer screen by \(P\) matrix. This <a href="https://www.3dgep.com/understanding-the-view-matrix/" target=&ldquo;blank&rdquo;>article</a> explains these 
+
+concepts quite well.<br /><br />
+
+
 
 From the point of view of the camera, linear transformations (e.g rotation, scaling, and translation) of the object will have the same effect if reverse transformations are applied to the camera itself. Example: in arcball orbit system, when the camera pitches by 30 degrees counterclock-wise, it is as if from the camera viewport the object pitches by 30 degrees clock-wise; the same argument can be applied to translation and scaling transformation. Hence, the view matrix is the inverse matrix of the object's model matrix:
 
-\(
+
+</p>
+<p style="text-align:center">
+\[
+
 \ V = M^{-1}
-\)
 
-To ensure that this relationship holds between the view and model matrix, we want the camera to always *focus at the origin* at the start of the transformation. This can be done by using a +lookAt()+ function.\n\n
+\]
+</p><p>
 
-Now come the code!\n\n
+To ensure that this relationship holds between the view and model matrix, we want the camera to always <b>focus at the origin</b> at the start of the transformation. This can be done by using a <tt>lookAt()</tt> function.<br /><br />
 
-Camera class setup with input handling in +GLFW+ and +glm+ for matrix calculation:
 
-~~~
-{}{C++}
-#include <glad/glad.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-#include <glm/ext/quaternion_transform.hpp>
+Now come the code!<br /><br />
+
+
+
+Camera class setup with input handling in <tt>GLFW</tt> and <tt>glm</tt> for matrix calculation:
+
+
+</p>
+<div class="codeblock">
+<div class="blockcontent"><pre>
+#include &lt;glad/glad.h&gt;
+
+#include &lt;glm/glm.hpp&gt;
+#include &lt;glm/gtc/matrix_transform.hpp&gt;
+#include &lt;glm/gtx/rotate_vector.hpp&gt;
+#include &lt;glm/ext/quaternion_transform.hpp&gt;
 
 enum Camera_Movement {
 	FORWARD,
@@ -75,7 +133,7 @@ public:
 		Yaw = yaw;
 		cameraState = CAM_FREE;
 	}
-	
+
 	void rotateTo(float dstYaw, float dstPitch)
 	{
 		if (cameraState == CAM_FIXED) return;
@@ -99,12 +157,12 @@ public:
 			Yaw -= ang_disp;
 	}
 
-	// Processes input received from a mouse input system. 
+	// Processes input received from a mouse input system.
 	// Expects the offset value in both the x and y direction.
 	void ProcessMouseMovement(const float xpos,const float ypos)
 	{
 		if (cameraState == CAM_FIXED) return;
-		
+
 		xoffset *= MouseSensitivity;
 		yoffset *= MouseSensitivity;
 
@@ -116,41 +174,45 @@ public:
 	void ProcessMouseScroll(float yoffset)
 	{
 		Zoom -= ScrollSensitivity*yoffset;
-		if (Zoom < 0.2f) Zoom = 0.2f;
-		if (Zoom > 3.0f) Zoom = 3.0;
+		if (Zoom &lt; 0.2f) Zoom = 0.2f;
+		if (Zoom &gt; 3.0f) Zoom = 3.0;
 	}
 };
-~~~
+</pre></div></div>
+<p>
 
 To get the View Matrix, we do:
-~~~
-{}{C++}
+</p>
+<div class="codeblock">
+<div class="blockcontent"><pre>
 glm::mat4 getModelMatrix()
 {
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::scale(model, Vec3(Zoom)); // scaling
 
 	model = glm::rotate(model, Yaw, Vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, Pitch, Vec3(1.0f, 0.0f, 0.0f)); 
+	model = glm::rotate(model, Pitch, Vec3(1.0f, 0.0f, 0.0f));
 	model = glm::scale(model, Vec3(Zoom));
 	return model;
 }
 
 // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
 glm::mat4 GetViewMatrix()
-{	
+{
 	auto model = getModelMatrix();
 	return glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f))*glm::inverse(model);
 }
-~~~
+</pre></div></div>
+<p>
 
-If we want the position of the camera in catesian coordinates, we can do:
-~~~
-{}{C++}
-glm::vec3 getCameraPosition() 
+If we want the position of the camera in cartesian coordinates, we can do:
+</p>
+<div class="codeblock">
+<div class="blockcontent"><pre>
+glm::vec3 getCameraPosition()
 {
 	return Vec3(
-		// here phi = pi/2 - pitch (since phi angle starts from xy-plane while pitch angle starts from xz-plane) 
+		// here phi = pi/2 - pitch (since phi angle starts from xy-plane while pitch angle starts from xz-plane)
 		// theta = yaw
 		// axis follows OpenGl convention
 		sinf(PI/2 - Pitch)*sinf(Yaw),
@@ -158,8 +220,16 @@ glm::vec3 getCameraPosition()
 		sinf(PI/2 - Pitch)*cosf(Yaw)
 	);
 }
-~~~
+</pre></div></div>
+<p>
 
-This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute +lookAt+ matrix only once during setup. \n\n
+This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute <tt>lookAt</tt> matrix only once during setup. <br /><br />
+</p>
 
-{{adasdad}}
+<iframe class='center' width="640" height="564" src="https://player.vimeo.com/video/321640008" frameborder="0" allowFullScreen mozallowfullscreen webkitAllowFullScreen></iframe>
+
+</td>
+</tr>
+</table>
+</body>
+</html>

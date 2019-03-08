@@ -5,8 +5,6 @@
 == Welcome
  I am a mechanical enginneering senior at University of Washington Bothell as of 2019. My intention for this website is to document my progress and research on a Finite Element Analysis Sandbox program I am working on. I also want to write about interesting implementations and quirky details in OpenGL.  
 
-An arcball rotation control system allows us to rotate the camera viewport freely around an object that is placed in the scene. This is one of the feature I want to implement in my FEA sandbox application. In my previous attempt to implement this camera system, my rotation scheme suffered from the singularity problem where if the camera pitches more than 90 degrees, the camera is upside-down and the view tends to reverse. In this document, I'll touch on an implementation using Euler angles that completely eliminates this singularity problem. This article assumes basic knowledge on rendering scene in 3D through three transformations: transformation to global coordinates from local by M matrix, transformation to camera viewport by V matrix, and a final transformation to render the 3D scene onto the computer screen by P matrix. [https://www.3dgep.com/understanding-the-view-matrix/ This article] explains these concepts quite well.
-
 \n
 [my_resume.pdf A brief resume].
 
