@@ -362,10 +362,6 @@ tr.heading {
     border-bottom: 2px solid black;
 }
 
-img {
-    border: none;
-}
-
 table.imgtable, table.imgtable td {
     border: none;
     text-align: left;
@@ -381,6 +377,7 @@ table.imgtable, table.imgtable td {
 }
 
 img {
+	border: 2px solid #dddddd;
     text-align: center;
 }
 

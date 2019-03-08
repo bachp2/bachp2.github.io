@@ -5,7 +5,12 @@
 <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" href="jemdoc.css" type="text/css" />
-<title>Blogs</title>
+<title>Blogs
+
+
+
+
+</title>
 <!-- MathJax -->
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
@@ -20,18 +25,58 @@ MathJax.Hub.Config({
 <table summary="Table for page layout." id="tlayout">
 <tr valign="top">
 <td id="layout-menu">
-<div class="menu-item"><a href="index.html">home</a></div>
-<div class="menu-item"><a href="blogs.html" class="current">blogs</a></div>
-<div class="menu-item"><a href="my_resume.pdf">resume</a></div>
-<div class="menu-item"><a href="random.html">random</a></div>
-<div class="menu-item"><a href="archives.html">archives</a></div>
+<div class="menu-item"><a href="index.html">home
+
+
+
+
+</a></div>
+<div class="menu-item"><a href="blogs.html" class="current">blogs
+
+
+
+
+</a></div>
+<div class="menu-item"><a href="my_resume.pdf">resume
+
+
+
+
+</a></div>
+<div class="menu-item"><a href="random.html">random
+
+
+
+
+</a></div>
+<div class="menu-item"><a href="archives.html">archives
+
+
+
+
+</a></div>
 </td>
 <td id="layout-content">
 <div id="toptitle">
-<h1>Blogs</h1>
-<div id="subtitle"></div>
+<h1>Blogs
+
+
+
+
+</h1>
+<div id="subtitle">
+
+
+
+
 </div>
-<h2>Arcball Camera System Using Euler Angles</h2>
+</div>
+<h2>Arcball Camera System Using Euler Angles
+
+
+
+
+</h2>
 <p>
 <img src="orbitcam.jpg" width="500px" alt="" class="center" /><figcaption>Camera orbiting in arcball control system</figcaption><br />
 
@@ -45,19 +90,40 @@ scene onto the computer screen by \(P\) matrix. This <a href="https:&lt;i&gt;&lt
 concepts quite well.<br /><br />
 
 From the point of view of the camera, linear transformations (e.g rotation, scaling, and translation) of the object will have the same effect if reverse transformations are applied to the camera itself. Example: in arcball orbit system, when the camera pitches by 30 degrees counterclock-wise, it is as if from the camera viewport the object pitches by 30 degrees clock-wise; the same argument can be applied to translation and scaling transformation. Hence, the view matrix is the inverse matrix of the object's model matrix:
-</p>
+
+
+
+
+
+</p>
 <p style="text-align:center">
 \[
 \ V = M^{-1}
 \]
+
+
+
+
+
 </p><p>
 To ensure that this relationship holds between the view and model matrix, we want the camera to always <b>focus at the origin</b> at the start of the transformation. This can be done by using a <tt>lookAt()</tt> function.<br /><br />
 
 Now come the code!<br /><br />
 
 Camera class setup with input handling in <tt>GLFW</tt> and <tt>glm</tt> for matrix calculation:
-</p>
+
+
+
+
+
+</p>
 <div class="codeblock">
+<div class="blocktitle">
+
+
+
+
+</div>
 <div class="blockcontent"><pre>
 #include &lt;glad/glad.h&gt;
 
@@ -153,8 +219,19 @@ public:
 };
 </pre></div></div>
 <p>
-To get the View Matrix, we do:</p>
+To get the View Matrix, we do:
+
+
+
+
+</p>
 <div class="codeblock">
+<div class="blocktitle">
+
+
+
+
+</div>
 <div class="blockcontent"><pre>
 glm::mat4 getModelMatrix()
 {
@@ -175,8 +252,19 @@ glm::mat4 GetViewMatrix()
 }
 </pre></div></div>
 <p>
-If we want the position of the camera in catesian coordinates, we can do:</p>
+If we want the position of the camera in catesian coordinates, we can do:
+
+
+
+
+</p>
 <div class="codeblock">
+<div class="blocktitle">
+
+
+
+
+</div>
 <div class="blockcontent"><pre>
 glm::vec3 getCameraPosition()
 {
@@ -192,8 +280,18 @@ glm::vec3 getCameraPosition()
 </pre></div></div>
 <p>
 This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute <tt>lookAt</tt> matrix only once during setup. <br /><br />
-</p>
-<p>{{adasdad}</p>
+
+
+
+
+
+</p>
+<p><iframe class='center' width="640" height="564" src="https://player.vimeo.com/video/321640008" frameborder="0" allowFullScreen mozallowfullscreen webkitAllowFullScreen></iframe>
+
+
+
+
+</p>
 </td>
 </tr>
 </table>

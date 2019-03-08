@@ -562,7 +562,7 @@ def replacequoted(b):
   r = re.compile(r'\{\{(.*?)\}\}', re.M + re.S)
   #print("found html section")
   m = r.search(b)
-  print(m)
+  #print(m)
   while m:
     qb = quote(m.group(1))
 
@@ -708,7 +708,7 @@ def replacelinks(b):
 
 def br(b, f, tableblock=False):
   """Does simple text replacements on a block of text. ('block replacements')"""
-
+  b += u'\n\n\n\n\n' #a hacky way to prevent the regex consuming the last char before new line char
   # Deal with environment variables (say, for Michael Grant).
   r = re.compile(r"!\$(\w{2,})\$!", re.M + re.S)
 

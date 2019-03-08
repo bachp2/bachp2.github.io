@@ -162,4 +162,4 @@ glm::vec3 getCameraPosition()
 
 This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute +lookAt+ matrix only once during setup. \n\n
 
-{{adasdad}}
+{{<iframe class='center' width="640" height="564" src="https://player.vimeo.com/video/321640008" frameborder="0" allowFullScreen mozallowfullscreen webkitAllowFullScreen></iframe>}}
