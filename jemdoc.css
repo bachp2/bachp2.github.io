@@ -3,11 +3,12 @@
 
 tr, td {
     display: inline;
+    border-spacing: 50px;
 }
 
 table#tlayout {
     border-collapse: separate;
-    border-spacing: 15px;
+    
 }
 
 body {
@@ -20,7 +21,7 @@ body {
 	padding-left: 4em;
 	border: 1px solid black;
 	outline-style: solid;
-	outline-color:#f8f8f8;
+	outline-color: #fff5ea;
 	outline-width: 500px;;
 	background-color:#FFFFFF;
 }
@@ -30,6 +31,8 @@ body {
 	padding-left: 8px;
 	padding-right: 8px;
 	font-size: 0.9em;
+
+	background: #F2F2F2;
 	width: 100%;
 	white-space: normal;
     text-align: left;
@@ -38,17 +41,17 @@ body {
 #layout-menu tr {
 	color: #f4f4f4;
     vertical-align: bottom;
+    font-weight: bold;
 }
 
 #layout-content {
-    border: 6px black;
-    background: white;
     text-align: left;
 }
 
 #layout-menu a {
 	line-height: 1.5em;
 	margin-left: 10%;
+	font-weight: bold;
 }
 
 tt {
@@ -85,8 +88,8 @@ a:hover {
 }
 
 div.menu-item {
-	padding-left: 16px;
-	text-indent: -16px;
+	margin-top: 50px;
+	margin-left: 20px;
 	display: inline;
 }
 
