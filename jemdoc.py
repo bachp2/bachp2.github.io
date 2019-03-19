@@ -637,7 +637,7 @@ def replaceimages(b):
     #print(m1)
     bits = []
     link = m.group(2).strip()
-    bits.append(r'src=\"%s\"' % quote(link))
+    bits.append(r'src=\"resources\\%s\"' % quote(link))
 
     if m1[0]:
       if m1[0].isdigit():
