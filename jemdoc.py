@@ -1540,6 +1540,11 @@ def main():
       thisout = outname + re.sub(r'.jemdoc$', '', inname) + '.html'
     else:
       thisout = outname
+    #thisout = re.sub(r'[^\\]+(?=\.jemdoc$)', '', inname) + '.html'
+
+    h, t = os.path.split(thisout)
+    thisout = ".\\" + t
+    #print(thisout)
 
     infile = io.open(inname, 'rUb')
     outfile = io.open(thisout, 'w')

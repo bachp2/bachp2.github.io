@@ -5,8 +5,7 @@
 <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" href="jemdoc.css" type="text/css" />
-<title>Blogs
-
+<title>Blogs
 
 
 
@@ -58,87 +57,60 @@ MathJax.Hub.Config({
 </tr>
 <tr id="layout-content">
 <div id="toptitle">
-	
-<h1>Blogs
-
+<h1>Blogs
 
 
 
 
 </h1>
-<div id="subtitle">
-
+<div id="subtitle">
 
 
 
 
 </div>
 </div>
-<h2>Arcball Camera System Using Euler Angles
-
+<h2>Arcball Camera System Using Euler Angles
 
 
 
 
 </h2>
-<p>
-
-<img src="orbitcam.jpg" width="500px" alt="" class="center" /><figcaption>Camera orbiting in arcball control system</figcaption><br />
-
-
-
-An arcball rotation control system allows us to rotate the camera viewport freely around an object that is placed in the scene. This is
-
-one of the feature I want to implement in my FEA sandbox application. In my previous attempt to implement this camera system, my
-
-rotation scheme suffered from the singularity problem where if the camera pitches more than 90 degrees, the camera is upside-down and 
-
-the view tends to reverse. In this document, I'll touch on an implementation using Euler angles that completely eliminates this 
-
-singularity problem. This document assumes basic knowledge on rendering scene in 3D through three transformations: transformation to 
-
-global coordinates from local by \(M\) matrix, transformation to camera viewport by \(V\) matrix, and a final transformation to render the 3D
-
-scene onto the computer screen by \(P\) matrix. This <a href="https:&lt;i&gt;&lt;/i&gt;www.3dgep.com&lt;i&gt;understanding-the-view-matrix&lt;/i&gt;" target=&ldquo;blank&rdquo;>article</a> explains these 
-
-concepts quite well.<br /><br />
-
-
-
-From the point of view of the camera, linear transformations (e.g rotation, scaling, and translation) of the object will have the same effect if reverse transformations are applied to the camera itself. Example: in arcball orbit system, when the camera pitches by 30 degrees counterclock-wise, it is as if from the camera viewport the object pitches by 30 degrees clock-wise; the same argument can be applied to translation and scaling transformation. Hence, the view matrix is the inverse matrix of the object's model matrix:
-
-
-
+<p>
+<img src="orbitcam.jpg" width="500px" alt="" class="center" /><figcaption>Camera orbiting in arcball control system</figcaption><br />
+
+An arcball rotation control system allows us to rotate the camera viewport freely around an object that is placed in the scene. This is
+one of the feature I want to implement in my FEA sandbox application. In my previous attempt to implement this camera system, my
+rotation scheme suffered from the singularity problem where if the camera pitches more than 90 degrees, the camera is upside-down and 
+the view tends to reverse. In this document, I'll touch on an implementation using Euler angles that completely eliminates this 
+singularity problem. This document assumes basic knowledge on rendering scene in 3D through three transformations: transformation to 
+global coordinates from local by \(M\) matrix, transformation to camera viewport by \(V\) matrix, and a final transformation to render the 3D
+scene onto the computer screen by \(P\) matrix. This <a href="https:&lt;i&gt;&lt;/i&gt;www.3dgep.com&lt;i&gt;understanding-the-view-matrix&lt;/i&gt;" target=&ldquo;blank&rdquo;>article</a> explains these 
+concepts quite well.<br /><br />
+
+From the point of view of the camera, linear transformations (e.g rotation, scaling, and translation) of the object will have the same effect if reverse transformations are applied to the camera itself. Example: in arcball orbit system, when the camera pitches by 30 degrees counterclock-wise, it is as if from the camera viewport the object pitches by 30 degrees clock-wise; the same argument can be applied to translation and scaling transformation. Hence, the view matrix is the inverse matrix of the object's model matrix:
+
 
 
 
 
 </p>
 <p style="text-align:center">
-\[
-
-\ V = M^{-1}
-
+\[
+\ V = M^{-1}
 \]
 
 
 
 
 
-</p><p>
-
-To ensure that this relationship holds between the view and model matrix, we want the camera to always <b>focus at the origin</b> at the start of the transformation. This can be done by using a <tt>lookAt()</tt> function.<br /><br />
-
-
-
-Now come the code!<br /><br />
-
-
-
-Camera class setup with input handling in <tt>GLFW</tt> and <tt>glm</tt> for matrix calculation:
-
-
-
+</p><p>
+To ensure that this relationship holds between the view and model matrix, we want the camera to always <b>focus at the origin</b> at the start of the transformation. This can be done by using a <tt>lookAt()</tt> function.<br /><br />
+
+Now come the code!<br /><br />
+
+Camera class setup with input handling in <tt>GLFW</tt> and <tt>glm</tt> for matrix calculation:
+
 
 
 
@@ -245,10 +217,8 @@ public:
 	}
 };
 </pre></div></div>
-<p>
-
-To get the View Matrix, we do:
-
+<p>
+To get the View Matrix, we do:
 
 
 
@@ -280,10 +250,8 @@ glm::mat4 GetViewMatrix()
 	return glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f))*glm::inverse(model);
 }
 </pre></div></div>
-<p>
-
-If we want the position of the camera in catesian coordinates, we can do:
-
+<p>
+If we want the position of the camera in catesian coordinates, we can do:
 
 
 
@@ -309,19 +277,15 @@ glm::vec3 getCameraPosition()
 	);
 }
 </pre></div></div>
-<p>
-
-This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute <tt>lookAt</tt> matrix only once during setup.
-
-
-
+<p>
+This is a quick and dirty way to implement an Arcball Camera system. We can optimize this further by directly compute the inverse matrix and compute <tt>lookAt</tt> matrix only once during setup.
+
 
 
 
 
 </p>
-<p><iframe class='vidcenter' width="640" height="564" src="https://player.vimeo.com/video/321640008" frameborder="0" allowFullScreen mozallowfullscreen webkitAllowFullScreen></iframe>
-
+<p><iframe class='vidcenter' width="640" height="564" src="https://player.vimeo.com/video/321640008" frameborder="0" allowFullScreen mozallowfullscreen webkitAllowFullScreen></iframe>
 
 
 
