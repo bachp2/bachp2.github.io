@@ -1,5 +1,5 @@
 /* Default css file for jemdoc. */
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
 tr, td {
     display: inline;
@@ -11,11 +11,18 @@ table#tlayout {
 }
 
 body {
-	font-family: 'Source Sans Pro', sans-serif;
+
+	font-family: 'PT Sans', sans-serif;
 	padding-bottom: 8px;
-	margin-left: 20%;
-	margin-right: 20%;
-	background-color:#f8f8f8;
+	margin-left: 10%;
+	margin-right: 10%;
+	padding-right: 4em;
+	padding-left: 4em;
+	border: 1px solid black;
+	outline-style: solid;
+	outline-color:#f8f8f8;
+	outline-width: 500px;;
+	background-color:#FFFFFF;
 }
 
 #layout-menu {
@@ -140,7 +147,6 @@ h3 {
 p {
 	margin-top: 0.0em;
 	margin-bottom: 0.8em;
-	padding: 0;
 	line-height: 1.3;
 }
 
