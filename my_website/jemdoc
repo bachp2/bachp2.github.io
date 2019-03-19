@@ -18,6 +18,9 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>.
 #
+# The LaTeX equation portions of this file were initially based on
+# latexmath2png, by Kamil Kisiel (kamil@kamikisiel.net).
+#
 
 from __future__ import print_function
 import sys
@@ -178,11 +181,12 @@ def standardconf():
   
   [menustart]
   <table summary="Table for page layout." id="tlayout">
-  <tr id="layout-menu">
+  <tr valign="top">
+  <td id="layout-menu">
   
   [menuend]
-  </tr>
-  <tr id="layout-content">
+  </td>
+  <td id="layout-content">
   
   [menucategory]
   <div class="menu-category">|</div>
@@ -203,7 +207,7 @@ def standardconf():
   <div id="layout-content">
   
   [menulastbit]
-  </tr>
+  </td>
   </tr>
   </table>
   
@@ -554,11 +558,9 @@ def quote(s):
 
 def replacequoted(b):
   """Quotes {{raw html}} sections."""
-  #r = re.compile(r'(?<!\\)\[raw((?:\{.*?\}){,1})]', re.M + re.S)
+
   r = re.compile(r'\{\{(.*?)\}\}', re.M + re.S)
-  #print("found html section")
   m = r.search(b)
-  #print(m)
   while m:
     qb = quote(m.group(1))
 
@@ -626,15 +628,15 @@ def replaceequations(b, f):
   return replacequoted(b)
 
 def replaceimages(b):
-  # works with [img{width}{height}{alttext}{caption} location caption].
-  r = re.compile(r'(?<!\\)\[img((?:\{.*?\}){,4})\s(.*?)(?:\s(.*?))?(?<!\\)\]',
+  # works with [img{width}{height}{alttext} location caption].
+  r = re.compile(r'(?<!\\)\[img((?:\{.*?\}){,3})\s(.*?)(?:\s(.*?))?(?<!\\)\]',
            re.M + re.S)
   m = r.search(b)
   s = re.compile(r'{(.*?)}', re.M + re.S)
   while m:
     m1 = list(s.findall(m.group(1)))
     m1 += ['']*(3 - len(m1))
-    #print(m1)
+
     bits = []
     link = m.group(2).strip()
     bits.append(r'src=\"%s\"' % quote(link))
@@ -655,8 +657,8 @@ def replaceimages(b):
       bits.append(r'alt=\"%s\"' % quote(m1[2]))
     else:
       bits.append(r'alt=\"\"')
-    bits.append(r'class=\"center\"')
-    b = b[:m.start()] + r'<img %s />' % " ".join(bits) + r'<figcaption>%s</figcaption>' % quote(m1[3]) + r'<br />' + b[m.end():]
+
+    b = b[:m.start()] + r'<img %s />' % " ".join(bits) + b[m.end():]
 
     m = r.search(b, m.start())
 
@@ -704,7 +706,7 @@ def replacelinks(b):
 
 def br(b, f, tableblock=False):
   """Does simple text replacements on a block of text. ('block replacements')"""
-  b += u'\n\n\n\n\n' #a hacky way to prevent the regex consuming the last char before new line char
+
   # Deal with environment variables (say, for Michael Grant).
   r = re.compile(r"!\$(\w{2,})\$!", re.M + re.S)
 
@@ -724,15 +726,10 @@ def br(b, f, tableblock=False):
   # Deal with {{html embedding}}.
   b = replacequoted(b)
 
-  # Deal with /italics/ first because the '/' in other tags would otherwise
-  # interfere.
-  r = re.compile(r'(?<!\\)/(.*?)(?<!\\)/', re.M + re.S)
-  b = re.sub(r, r'<i>\1</i>', b)
-
   b = allreplace(b)
-  # Deal with image
-  b = replaceimages(b) # jem not sure if this is still used.
+
   b = b.lstrip('-. \t') # remove leading spaces, tabs, dashes, dots.
+  b = replaceimages(b) # jem not sure if this is still used.
 
   # Slightly nasty hackery in this next bit.
   b = replacepercents(b)
@@ -740,6 +737,11 @@ def br(b, f, tableblock=False):
   b = re.sub(r'BSNOTLINKLEFT12039XX', r'[', b)
   b = re.sub(r'BSNOTLINKRIGHT12039XX', r']', b)
   b = replacequoted(b)
+
+  # Deal with /italics/ first because the '/' in other tags would otherwise
+  # interfere.
+  r = re.compile(r'(?<!\\)/(.*?)(?<!\\)/', re.M + re.S)
+  b = re.sub(r, r'<i>\1</i>', b)
 
   # Deal with *bold*.
   r = re.compile(r'(?<!\\)\*(.*?)(?<!\\)\*', re.M + re.S)
@@ -998,6 +1000,89 @@ def language(f, l, hl):
       return
 
   out(f, l + '\n')
+
+def geneq(f, eq, dpi, wl, outname):
+  # First check if there is an existing file.
+  eqname = os.path.join(f.eqdir, outname + '.png')
+
+  eqdepths = {}
+  if f.eqcache:
+    try:
+      dc = io.open(os.path.join(f.eqdir, '.eqdepthcache'), 'rb')
+      for l in dc:
+        a = l.split()
+        eqdepths[a[0]] = int(a[1])
+      dc.close()
+
+      if os.path.exists(eqname) and eqname in eqdepths:
+        return (eqdepths[eqname], eqname)
+    except IOError:
+      print('eqdepthcache read failed.')
+
+  # Open tex file.
+  tempdir = tempfile.gettempdir()
+  fd, texfile = tempfile.mkstemp('.tex', '', tempdir, True)
+  basefile = texfile[:-4]
+  g = os.fdopen(fd, 'wb')
+
+  preamble = '\documentclass{article}\n'
+  for p in f.eqpackages:
+    preamble += '\\usepackage{%s}\n' % p
+  for p in f.texlines:
+    # Replace \{ and \} in p with { and }.
+    # XXX hack.
+    preamble += re.sub(r'\\(?=[{}])', '', p + '\n')
+  preamble += '\pagestyle{empty}\n\\begin{document}\n'
+  g.write(preamble)
+  
+  # Write the equation itself.
+  if wl:
+    g.write('\\[%s\\]' % eq)
+  else:
+    g.write('$%s$' % eq)
+
+  # Finish off the tex file.
+  g.write('\n\\newpage\n\end{document}')
+  g.close()
+
+  exts = ['.tex', '.aux', '.dvi', '.log']
+  try:
+    # Generate the DVI file
+    latexcmd = 'latex -file-line-error-style -interaction=nonstopmode ' + \
+         '-output-directory %s %s' % (tempdir, texfile)
+    p = Popen(latexcmd, shell=True, stdout=PIPE)
+    rc = p.wait()
+    if rc != 0:
+      for l in p.stdout.readlines():
+        print('  ' + l.rstrip())
+      exts.remove('.tex')
+      raise Exception('latex error')
+
+    dvifile = basefile + '.dvi'
+    dvicmd = 'dvipng --freetype0 -Q 9 -z 3 --depth -q -T tight -D %i -bg Transparent -o %s %s' % (dpi, eqname, dvifile)
+    # discard warnings, as well.
+    p = Popen(dvicmd, shell=True, stdout=PIPE, stderr=PIPE)
+    rc = p.wait()
+    if rc != 0:
+      print(p.stderr.readlines())
+      raise Exception('dvipng error')
+    depth = int(p.stdout.readlines()[-1].split('=')[-1])
+  finally:
+    # Clean up.
+    for ext in exts:
+      g = basefile + ext
+      if os.path.exists(g):
+        os.remove(g)
+
+  # Update the cache if we're using it.
+  if f.eqcache and eqname not in eqdepths:
+    try:
+      dc = io.open(os.path.join(f.eqdir, '.eqdepthcache'), 'ab')
+      dc.write(eqname + ' ' + str(depth) + '\n')
+      dc.close()
+    except IOError:
+      print('eqdepthcache update failed.')
+  return (depth, eqname)
 
 def dashlist(f, ordered=False):
   level = 0

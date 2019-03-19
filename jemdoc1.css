@@ -1,46 +1,56 @@
 /* Default css file for jemdoc. */
-@import url('https://fonts.googleapis.com/css?family=Raleway|Source+Sans+Pro');
 
-tr, td {
-    display: inline;
+@font-face {
+  font-family: 'Lato-Regular';
+  src: 
+       url('fonts/Lato/Lato-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
 }
 
 table#tlayout {
+    border: none;
     border-collapse: separate;
+    background: white;
 }
 
 body {
-	font-family: 'Source Sans Pro', sans-serif;
+	background: white;
+	font-family: 'Lato-Regular', serif;
 	padding-bottom: 8px;
-	margin-left: 20%;
-	margin-right: 20%;
-	background-color:#f8f8f8;
+	margin-right: 10%;
 }
 
 #layout-menu {
+	background: white;
+	border: 0px solid #dddddd;
 	padding-top: 0.5em;
 	padding-left: 8px;
 	padding-right: 8px;
 	font-size: 0.9em;
-	width: 100%;
-	white-space: normal;
+	width: auto;
+	margin-right: 10%
+	white-space: nowrap;
     text-align: left;
+    vertical-align: top;
 }
 
-#layout-menu tr {
-	color: #f4f4f4;
-    vertical-align: bottom;
+#layout-menu td {
+	background: #f4f4f4;
+    vertical-align: top;
 }
 
 #layout-content {
-    border: 6px black;
+	padding-top: 0.0em;
+	padding-left: 10.0em;
+	padding-right: 12.0em;
+    border: none;
     background: white;
     text-align: left;
+    vertical-align: top;
 }
 
 #layout-menu a {
 	line-height: 1.5em;
-	margin-left: 10%;
+	margin-left: 0.5em;
 }
 
 tt {
@@ -75,15 +85,23 @@ a:hover {
 	text-decoration: none;
 }
 
+div.menu-category {
+	border-bottom: 1px solid gray;
+	margin-top: 0.8em;
+	padding-top: 0.2em;
+	padding-bottom: 0.1em;
+	font-weight: bold;
+}
+
 div.menu-item {
 	padding-left: 16px;
 	text-indent: -16px;
-	display: inline;
 }
 
 div#toptitle {
 	padding-bottom: 0.2em;
 	margin-bottom: 1.5em;
+	border-bottom: 3px double gray;
 	width: 85%
 }
 
@@ -115,6 +133,8 @@ h1, h2, h3 {
 	padding-bottom: 0.2em;
 	line-height: 1.0;
 	padding-top: 0.5em;
+	border-bottom: 3px solid #aaaaaa;
+	width: 80%
 }
 
 h1 {
@@ -223,7 +243,7 @@ p + div.codeblock {
 }
 
 div.codeblock, div.infoblock {
-	padding-right: 5%;
+	margin-right: 0%;
 	margin-top: 1.2em;
 	margin-bottom: 1.3em;
 }
@@ -238,8 +258,6 @@ div.blocktitle {
 div.blockcontent {
 	border: 1px solid silver;
 	padding: 0.3em 0.5em;
-	white-space: normal; 
-	overflow: auto;
 }
 
 div.infoblock > div.blockcontent {
@@ -289,8 +307,12 @@ span.comment, span.comment > *, span.string, span.string > * {
 	color: #606060;
 }
 
+@media print {
+	#layout-menu { display: none; }
+}
+
 #fwtitle {
-	margin: 15px;
+	margin: 2px;
 }
 
 #fwtitle #toptitle {
@@ -324,40 +346,33 @@ img.eqwl {
 	margin: 0;
 }
 
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 2px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    text-align: center;
+    border: 1px solid gray;
+}
+
+table + table {
+    margin-top: 1em;
+}
 
 tr.heading {
     font-weight: bold;
     border-bottom: 2px solid black;
 }
 
-table.imgtable, table.imgtable tr {
+img {
+    border: none;
+}
+
+table.imgtable, table.imgtable td {
     border: none;
     text-align: left;
-}
-
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 15px;
-  margin-top: 15px;
-  width: 50%;
-}
-
-.vidcenter{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-
-img {
-	border: 2px solid #dddddd;
-    text-align: center;
-}
-
-figcaption {
-	text-align: center;
-	font-size: 80%;
-	font-style: oblique;
 }
